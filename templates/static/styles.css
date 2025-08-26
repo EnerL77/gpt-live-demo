@@ -1,0 +1,9 @@
+body { font-family: sans-serif; background: #111; color: #eee; margin: 0; }
+.wrap { max-width: 700px; margin: auto; padding: 20px; }
+.chat { border: 1px solid #333; border-radius: 8px; height: 400px; overflow-y: auto; padding: 10px; background: #222; }
+.msg { margin: 8px 0; padding: 8px 12px; border-radius: 6px; }
+.msg.user { background: #1a2234; }
+.msg.assistant { background: #13221a; }
+form { display: flex; margin-top: 10px; }
+#input { flex: 1; padding: 10px; border-radius: 6px; border: none; }
+#send { margin-left: 8px; padding: 10px 16px; border: none; border-radius: 6px; background: #444; color: #eee; cursor: pointer; }
