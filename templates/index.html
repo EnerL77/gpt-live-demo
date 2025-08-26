@@ -1,0 +1,61 @@
+Inhalt:
+```html
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live GPT Demo</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <h1>Live GPT Demo</h1>
+    <div id="chat" class="chat"></div>
+    <form id="form">
+      <input id="input" type="text" placeholder="Frage eingeben…" autocomplete="off" />
+      <button id="send" type="submit">Senden</button>
+    </form>
+  </div>
+
+<script>
+const chat = document.getElementById('chat');
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const history = [];
+
+function addMsg(role, text) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  el.innerText = text;
+  chat.appendChild(el);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function send(message) {
+  addMsg('user', message);
+  history.push({role:'user', content: message});
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ message, history })
+  });
+  const data = await res.json();
+  if (data.answer) {
+    addMsg('assistant', data.answer);
+    history.push({role:'assistant', content: data.answer});
+  } else {
+    addMsg('assistant', '⚠️ ' + (data.error || 'Unknown error'));
+  }
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const message = input.value.trim();
+  if (!message) return;
+  input.value = '';
+  send(message);
+});
+</script>
+</body>
+</html>
